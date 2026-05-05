@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bank Management</title>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #f4f6f9;
+            text-align: center;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        .box {
+            background: white;
+            padding: 20px;
+            margin: 20px auto;
+            width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px #ccc;
+        }
+
+        input {
+            width: 90%;
+            padding: 8px;
+            margin: 5px;
+        }
+
+        button {
+            padding: 8px 12px;
+            margin: 5px;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        table {
+            margin: auto;
+            border-collapse: collapse;
+            width: 90%;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ccc;
+        }
+
+        th {
+            background: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1> Bank Management System</h1>
+
+<!-- CREATE -->
+<div class="box">
+    <h3>Create Account</h3>
+    <input id="name" placeholder="Name"><br>
+    <input id="acc" placeholder="Account Number"><br>
+    <input id="bal" placeholder="Balance"><br>
+    <button onclick="createAccount()">Create</button>
+</div>
+
+<!-- TABLE -->
+<div class="box">
+    <h3>Accounts</h3>
+    <button onclick="getAccounts()">Load Accounts</button>
+    <div id="table"></div>
+</div>
+
+<script>
+
+    const BASE = "http://localhost:8080/api/accounts";
+
+    // helper to get input value safely
+    function val(id) {
+        return document.getElementById(id).value;
+    }
+
+    // CREATE
+    function createAccount() {
+        fetch(BASE, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                name: val("name"),
+                accountNumber: val("acc"),
+                balance: parseFloat(val("bal"))
+            })
+        })
+            .then(res => res.json())
+            .then(data => {
+                console.log("Created:", data);
+                alert(" Account Created");
+                getAccounts();
+            })
+            .catch(err => console.error("CREATE ERROR:", err));
+    }
+
+    // READ + TABLE VIEW
+    function getAccounts() {
+        fetch(BASE)
+            .then(res => res.json())
+            .then(data => {
+
+                console.log("DATA:", data); // DEBUG
+
+                let html = "<table>";
+                html += "<tr><th>ID</th><th>Name</th><th>Acc No</th><th>Balance</th><th>Actions</th></tr>";
+
+                data.forEach(a => {
+                    html += `<tr>
+                <td>${a.id ?? ""}</td>
+                <td>${a.name ?? ""}</td>
+                <td>${a.accountNumber ?? ""}</td>
+                <td>${a.balance ?? ""}</td>
+                <td>
+                    <button onclick="edit(${a.id})">Edit</button>
+                    <button onclick="deposit(${a.id})">Deposit</button>
+                    <button onclick="withdraw(${a.id})">Withdraw</button>
+                    <button onclick="deleteAcc(${a.id})">Delete</button>
+                </td>
+            </tr>`;
+                });
+
+                html += "</table>";
+
+                document.getElementById("table").innerHTML = html;
+            })
+            .catch(err => console.error("GET ERROR:", err));
+    }
+
+    // EDIT
+    function edit(id) {
+        const newName = prompt("Enter new name:");
+        const newBalance = prompt("Enter new balance:");
+
+        fetch(`${BASE}/${id}`, {
+            method: "PUT",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({
+                name: newName,
+                balance: parseFloat(newBalance)
+            })
+        })
+            .then(res => res.json())
+            .then(() => {
+                alert(" Updated");
+                getAccounts();
+            });
+    }
+
+    // DELETE
+    function deleteAcc(id) {
+        fetch(`${BASE}/${id}`, { method: "DELETE" })
+            .then(() => {
+                alert(" Deleted");
+                getAccounts();
+            });
+    }
+
+    // DEPOSIT
+    function deposit(id) {
+        const amt = prompt("Enter deposit amount:");
+
+        fetch(`${BASE}/${id}/deposit?amount=${amt}`, { method: "POST" })
+            .then(res => res.json())
+            .then(() => {
+                alert(" Deposited");
+                getAccounts();
+            });
+    }
+
+    // WITHDRAW
+    function withdraw(id) {
+        const amt = prompt("Enter withdraw amount:");
+
+        fetch(`${BASE}/${id}/withdraw?amount=${amt}`, { method: "POST" })
+            .then(res => res.json())
+            .then(() => {
+                alert(" Withdrawn");
+                getAccounts();
+            });
+    }
+
+    // AUTO LOAD ON PAGE OPEN
+    window.onload = getAccounts;
+
+</script>
+
+</body>
+</html>
