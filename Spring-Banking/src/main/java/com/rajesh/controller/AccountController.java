@@ -27,22 +27,19 @@ public class AccountController {
                                  @RequestBody Account account) {
         return service.updateAccount(id, account);
     }
-
-    // ✅ Delete Account
+    // ✅ Delete Account    // ✅ Delete Account    // ✅ Delete Account    // ✅ Delete Account    // ✅ Delete Account
     @DeleteMapping("/{id}")
     public String deleteAccount(@PathVariable Long id) {
         service.deleteAccount(id);
         return "Account Deleted Successfully";
     }
-
-    // ✅ Deposit
+    // ✅ Deposit    // ✅ Deposit    // ✅ Deposit    // ✅ Deposit    // ✅ Deposit    // ✅ Deposit    // ✅ Deposit    // ✅ Deposit
     @PostMapping("/{id}/deposit")
     public Account deposit(@PathVariable Long id,
                            @RequestParam double amount) {
         return service.deposit(id, amount);
     }
-
-    // ✅ Withdraw
+    // ✅ Withdraw    // ✅ Withdraw    // ✅ Withdraw    // ✅ Withdraw    // ✅ Withdraw    // ✅ Withdraw    // ✅ Withdraw    // ✅ Withdraw
     @PostMapping("/{id}/withdraw")
     public Account withdraw(@PathVariable Long id,
                             @RequestParam double amount) {
