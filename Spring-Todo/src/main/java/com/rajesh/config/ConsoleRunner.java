@@ -20,10 +20,8 @@ public class ConsoleRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-
         Scanner sc = new Scanner(System.in);
         int choice;
-
         do {
             System.out.println("\n===== TO-DO LIST MENU =====");
             System.out.println("1. Add Task");
@@ -37,19 +35,15 @@ public class ConsoleRunner implements CommandLineRunner {
                 System.out.print("Invalid input. Enter a number: ");
                 sc.next();
             }
-
             choice = sc.nextInt();
             sc.nextLine();
-
             switch (choice) {
-
                 case 1:
                     System.out.print("Enter Task Name: ");
                     String name = sc.nextLine();
                     service.addTask(new Task(name));
                     System.out.println("✅ Task added!");
                     break;
-
                 case 2:
                     List<Task> tasks = service.getAllTasks();
                     tasks.forEach(t ->
@@ -57,31 +51,25 @@ public class ConsoleRunner implements CommandLineRunner {
                                     (t.isCompleted() ? " [✔]" : " [✘]"))
                     );
                     break;
-
                 case 3:
                     System.out.print("Enter Task ID: ");
                     Long id = sc.nextLong();
                     service.markCompleted(id);
                     System.out.println("✅ Completed!");
                     break;
-
                 case 4:
                     System.out.print("Enter Task ID: ");
                     Long delId = sc.nextLong();
                     service.deleteTask(delId);
                     System.out.println("🗑 Deleted!");
                     break;
-
                 case 5:
                     System.out.println("Exiting...");
                     break;
-
                 default:
                     System.out.println("Invalid choice!");
             }
-
         } while (choice != 5);
-
         sc.close();
     }
 }
