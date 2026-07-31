@@ -1,23 +1,16 @@
 package com.rajesh.config;
-
 import java.util.List;
 import java.util.Scanner;
-
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
-
 import com.rajesh.model.Task;
 import com.rajesh.service.TaskService;
-
 @Component
 public class ConsoleRunner implements CommandLineRunner {
-
     private final TaskService service;
-
     public ConsoleRunner(TaskService service) {
         this.service = service;
     }
-
     @Override
     public void run(String... args) {
         Scanner sc = new Scanner(System.in);
