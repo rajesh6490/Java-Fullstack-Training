@@ -14,6 +14,19 @@ public class AccountController {
     public Account createAccount(@RequestBody Account account) {
         return service.createAccount(account);
     }
+        // ✅ Withdraw    // ✅ Withdraw    // ✅ Withdraw    // ✅ Withdraw    // ✅ Withdraw    // ✅ Withdraw
+        // ✅ Withdraw
+        // ✅ Withdraw
+        // ✅ Withdraw
+        // ✅ Withdraw
+
+        // ✅ Withdraw
+        // ✅ Withdraw
+        // ✅ Withdraw
+        // ✅ Withdraw
+        // ✅ Withdraw
+        // ✅ Withdraw    // ✅ Withdraw
+        // ✅ Withdraw
     @GetMapping
     public List<Account> getAllAccounts() {
         return service.getAllAccounts();
